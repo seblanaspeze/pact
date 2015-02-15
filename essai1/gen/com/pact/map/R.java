@@ -2049,6 +2049,7 @@ containing a value of this type.
         public static final int icon=0x7f080037;
         public static final int ifRoom=0x7f08001d;
         public static final int image=0x7f080034;
+        public static final int itineraire=0x7f080051;
         public static final int listMode=0x7f080014;
         public static final int list_item=0x7f080036;
         public static final int mapView=0x7f080050;
@@ -2087,6 +2088,7 @@ containing a value of this type.
         public static final int title=0x7f080038;
         public static final int up=0x7f080027;
         public static final int useLogo=0x7f080016;
+        public static final int valider=0x7f080052;
         public static final int withText=0x7f08001f;
         public static final int wrap_content=0x7f08000d;
     }
@@ -2144,6 +2146,7 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f030018;
     }
     public static final class string {
+        public static final int Button=0x7f060034;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abc_action_bar_home_description=0x7f060024;
@@ -2304,8 +2307,10 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
+        public static final int pointdepassage=0x7f060035;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
+        public static final int valider=0x7f060036;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
