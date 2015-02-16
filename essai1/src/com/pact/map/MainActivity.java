@@ -180,7 +180,7 @@ public class MainActivity extends Activity {
     				double lat = Double.parseDouble((String) point.get("lat"));
     				double lng = Double.parseDouble((String) point.get("lng"));
     				LatLng position = new LatLng(lat, lng);
-    				
+    				System.out.println("derniere boucle for");
     				points.add(position);
     			}
 
@@ -188,7 +188,7 @@ public class MainActivity extends Activity {
     			polyLineOptions.width(2);
     			polyLineOptions.color(Color.BLUE);
     		}
-
+    		System.out.println("poly");
     		googleMap.addPolyline(polyLineOptions);
     	}
     	

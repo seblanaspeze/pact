@@ -34,11 +34,11 @@ public class Connection {
 		}
 		String key= "&key=AIzaSyDZqf_7vXpMUuFZANaSslul8DmS6ukmeJ0";
 		String sensor = "sensor=false";
-		String params = sensor + "&" + origin + destination + waypoints + key;
+		String params = sensor + "&" + origin + destination + waypoints ;// + key;
 		String output = "json";
-		url = "https://maps.googleapis.com/maps/api/directions/"
-				+ output + "?" + params;
-		//url = "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyDZqf_7vXpMUuFZANaSslul8DmS6ukmeJ0";
+		String mode = "&mode=walking";
+		url = "https://maps.googleapis.com/maps/api/directions/"+ output + "?" + params + mode;
+		//url = "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal";//&key=AIzaSyDZqf_7vXpMUuFZANaSslul8DmS6ukmeJ0";
 		System.out.println(url);
 		
 	
