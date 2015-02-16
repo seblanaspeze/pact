@@ -32,12 +32,13 @@ public class Connection {
 				waypoints = waypoints + list.get(i).latitude+","+list.get(i).longitude + ",MA|";
 			}
 		}
-		String key= "key=AIzaSyDORMusVOPdjXdJ-Sun-PFoYkt2ux4uZ9E";
+		String key= "&key=AIzaSyDZqf_7vXpMUuFZANaSslul8DmS6ukmeJ0";
 		String sensor = "sensor=false";
 		String params = sensor + "&" + origin + destination + waypoints + key;
 		String output = "json";
 		url = "https://maps.googleapis.com/maps/api/directions/"
 				+ output + "?" + params;
+		//url = "https://maps.googleapis.com/maps/api/directions/json?origin=Toronto&destination=Montreal&key=AIzaSyDZqf_7vXpMUuFZANaSslul8DmS6ukmeJ0";
 		System.out.println(url);
 		
 	

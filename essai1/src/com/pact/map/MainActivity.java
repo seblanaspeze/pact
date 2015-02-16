@@ -3,9 +3,13 @@ package com.pact.map;
 //import android.R;
 //import gen.com.example.essai1.R;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,16 +95,21 @@ public class MainActivity extends Activity {
 				
 				String url = connection.getURL();
 				
-				MaRequete requete = new MaRequete();
-				requete.execute(url);
-				data = requete.getdata();
-				System.out.println(data);
+				//MaRequete requete = new MaRequete();
+				//requete.execute(url);
+				
+				
+				//data = requete.getdata();
+				//System.out.println(data);
 				
 				//Parseur parseur = new Parseur();
 				//parseur.execute(data);
 				//PolylineOptions poly = parseur.getpoly();
 				
 				//googleMap.addPolyline(poly);
+				
+				ReadTask downloadTask = new ReadTask();
+				downloadTask.execute(url);
 			}
 			
 		});
@@ -112,5 +121,78 @@ public class MainActivity extends Activity {
 			
 		
 	}
+    
+    private class ReadTask extends AsyncTask<String, Void,String> {
+		@Override
+		protected String doInBackground(String... url) {
+			String data = "";
+			try {
+				HttpConnection http = new HttpConnection();
+				data = http.readUrl(url[0]);
+			} catch (Exception e) {
+				Log.d("Background Task", e.toString());
+			}
+			return data;
+		}
 
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			new ParserTask().execute(result);
+		}
+	}
+    
+    private class ParserTask extends AsyncTask<String, Void, ArrayList<ArrayList<HashMap<String,String>>>> {
+    	
+    	
+    	@Override
+    	protected ArrayList<ArrayList<HashMap<String,String>>> doInBackground(String... jsonData) {
+
+    		JSONObject jObject;
+    		ArrayList<ArrayList<HashMap<String,String>>> routes = null;
+
+    		try {
+    			jObject = new JSONObject(jsonData[0]);
+    			PathJSONParser parser = new PathJSONParser();
+    			routes = parser.parse(jObject);
+    			System.out.println("parseur");
+    		} 
+    		catch (Exception e) {
+    			e.printStackTrace();
+    		}
+    		return routes;
+    	}
+
+    	@Override
+    	protected void onPostExecute(ArrayList<ArrayList<HashMap<String,String>>> routes) {
+    		ArrayList<LatLng> points = null;
+    		PolylineOptions polyLineOptions = null;
+
+    		// traversing through routes
+    		for (int i = 0; i < routes.size(); i++) {
+    			points = new ArrayList<LatLng>();
+    			polyLineOptions = new PolylineOptions();
+    			ArrayList<HashMap<String,String>> path =  routes.get(i);
+
+    			for (int j = 0; j < path.size(); j++) {
+    				HashMap<String,String> point =  path.get(j);
+
+    				double lat = Double.parseDouble((String) point.get("lat"));
+    				double lng = Double.parseDouble((String) point.get("lng"));
+    				LatLng position = new LatLng(lat, lng);
+    				
+    				points.add(position);
+    			}
+
+    			polyLineOptions.addAll(points);
+    			polyLineOptions.width(2);
+    			polyLineOptions.color(Color.BLUE);
+    		}
+
+    		googleMap.addPolyline(polyLineOptions);
+    	}
+    	
+    	
+
+    }
 }

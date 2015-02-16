@@ -42,7 +42,7 @@
             android:value="6171000" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDORMusVOPdjXdJ-Sun-PFoYkt2ux4uZ9E" />
+            android:value="AIzaSyDZqf_7vXpMUuFZANaSslul8DmS6ukmeJ0" />
         
         <activity 
             

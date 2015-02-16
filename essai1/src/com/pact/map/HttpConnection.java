@@ -13,6 +13,7 @@ import android.util.Log;
 
 public class HttpConnection {
 	
+	
 	public String readUrl(String mapsApiDirectionsUrl) throws IOException {
 		String data = "";
 		InputStream iStream = null;

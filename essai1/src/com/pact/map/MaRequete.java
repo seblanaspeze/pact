@@ -26,6 +26,7 @@ public class MaRequete  extends AsyncTask<String, Void, String > {
 		}
 
 		public String getdata(){
+			
 			System.out.println("je renvoie data");
 			return data2;
 		}
