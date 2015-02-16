@@ -1,0 +1,9 @@
+package com.pact.map;
+
+public class MaRequete {
+
+	public MaRequete() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

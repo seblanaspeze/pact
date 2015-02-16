@@ -1,0 +1,9 @@
+package com.pact.map;
+
+public class HttpConnection {
+
+	public HttpConnection() {
+		// TODO Auto-generated constructor stub
+	}
+
+}
