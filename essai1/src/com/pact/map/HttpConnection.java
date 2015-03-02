@@ -29,7 +29,7 @@ public class HttpConnection {
 			String line = "";
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
-				System.out.println("je suis connecté");
+				//System.out.println("je suis connecté");
 			}
 			data = sb.toString();
 			br.close();

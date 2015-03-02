@@ -2205,6 +2205,7 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f060027;
         public static final int accept=0x7f060002;
         public static final int app_name=0x7f060033;
+        public static final int calcul=0x7f060037;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f060009;

@@ -10,119 +10,153 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
 //import com.google.android.gms.R;
 
-@SuppressLint("NewApi") 
+@SuppressLint("NewApi")
 public class MainActivity extends Activity {
-	
+
 	Button itineraire;
 	Button valider;
+	//ProgressBar bar;
 	String data;
 	int c = 0;
+	int d = 0;
 	ArrayList<LatLng> listepoint = new ArrayList<LatLng>();;
-	static final LatLng TutorialsPoint = new LatLng(21 , 57);
-    private GoogleMap googleMap;
-    
-    @SuppressLint("NewApi") 
-    @Override
-	protected void onCreate(Bundle savedInstanceState){
+
+	private GoogleMap googleMap;
+	private LatLng myLocation;
+	private Location location;
+
+	@SuppressLint("NewApi")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+	//	bar = (ProgressBar) findViewById(R.id.bar);
+		itineraire = (Button) findViewById(R.id.itineraire);
+		valider = (Button) findViewById(R.id.valider);
 		
-		itineraire = (Button)findViewById(R.id.itineraire);
-		valider = (Button)findViewById(R.id.valider);
-	
+
 		try {
 			if (googleMap == null) {
-				googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapView)).getMap();
+				googleMap = ((MapFragment) getFragmentManager()
+						.findFragmentById(R.id.mapView)).getMap();
 			}
 			googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-			Marker TP = googleMap.addMarker(new MarkerOptions().position(TutorialsPoint).title("TutorialsPoint"));
 
 		}
-		
+
 		catch (Exception e) {
-        e.printStackTrace();
+			e.printStackTrace();
 		}
-		
-		itineraire.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-            	
-            	System.out.println("Boujour");
-            	itineraire.setText("Ajouter un point de passage");
-            	valider.setVisibility(v.VISIBLE); 
-            	
-            	
-            	googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {  
-        			@Override  
-        			public void onMapClick(LatLng point) { 
-        				if( c == 0){
-        					googleMap.addMarker(new MarkerOptions().position(point).title("depart"));
-        				}
-        				else {
-        					googleMap.addMarker(new MarkerOptions().position(point).title("point de passage "+c+""));
-        				}
-        				listepoint.add(point);
-        				
-        				System.out.println("ici");
-        				c = c+1;
-        			}
-        		});
-            	
-           
-            }
+
+		googleMap.setMyLocationEnabled(true);
+		location = googleMap.getMyLocation();
+
+		if (location != null) {
+			myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+			googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+		 }
+		 
+		// 48 2
+
+		itineraire.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				
+				if (c != 0 || d == 0){
+					googleMap.clear();
+					listepoint.clear();
+				}
+				
+
+				//System.out.println("Boujour");
+				itineraire.setText("		Annuler		");
+				valider.setVisibility(View.VISIBLE);
+
+				googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+							@Override
+							public void onMapLongClick(LatLng point) {
+								if (c == 0) {
+									googleMap.addMarker(new MarkerOptions()
+											.position(point).title("depart"));
+								} else {
+									googleMap.addMarker(new MarkerOptions()
+											.position(point).title(
+													"point de passage " + c
+															+ ""));
+								}
+								listepoint.add(point);
+
+								//System.out.println("ici");
+								c = c + 1;
+								d = d + 1;
+								
+							}
+						});
+
+			}
 		});
-		
-		valider.setOnClickListener(new View.OnClickListener(){
-			public void onClick(View v){
-				valider.setVisibility(v.INVISIBLE);
+
+		valider.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				valider.setVisibility(View.INVISIBLE);
 				itineraire.setText("Nouvel Itineraire");
-				Connection connection = new Connection(listepoint);
-				//System.out.println(listepoint.get(0));
-				
-				String url = connection.getURL();
-				
-				//MaRequete requete = new MaRequete();
-				//requete.execute(url);
-				
-				
-				//data = requete.getdata();
-				//System.out.println(data);
-				
-				//Parseur parseur = new Parseur();
-				//parseur.execute(data);
-				//PolylineOptions poly = parseur.getpoly();
-				
-				//googleMap.addPolyline(poly);
-				
+				String url = Connection.getURLConnection(listepoint);
+				System.out.println(url);
+				// MaRequete requete = new MaRequete();
+				// requete.execute(url);
+
+				// data = requete.getdata();
+				// System.out.println(data);
+
+				// Parseur parseur = new Parseur();
+				// parseur.execute(data);
+				// PolylineOptions poly = parseur.getpoly();
+
+				// googleMap.addPolyline(poly);
+
 				ReadTask downloadTask = new ReadTask();
 				downloadTask.execute(url);
-			}
-			
-		});
-		
-		
-		
-		
 
-			
-		
+			}
+
+		});
+
 	}
-    
-    private class ReadTask extends AsyncTask<String, Void,String> {
+
+	private class ReadTask extends AsyncTask<String, Integer, String> {
+		
+		/*@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values){
+			super.onProgressUpdate(values);
+			bar.setVisibility(View.VISIBLE);
+			// Mise à jour de la ProgressBar
+			bar.setProgress(values[0]);
+		}*/
+		
 		@Override
 		protected String doInBackground(String... url) {
 			String data = "";
@@ -138,61 +172,65 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
+			//bar.setVisibility(View.INVISIBLE);
 			new ParserTask().execute(result);
 		}
 	}
-    
-    private class ParserTask extends AsyncTask<String, Void, ArrayList<ArrayList<HashMap<String,String>>>> {
-    	
-    	
-    	@Override
-    	protected ArrayList<ArrayList<HashMap<String,String>>> doInBackground(String... jsonData) {
 
-    		JSONObject jObject;
-    		ArrayList<ArrayList<HashMap<String,String>>> routes = null;
+	private class ParserTask
+			extends
+			AsyncTask<String, Void, ArrayList<ArrayList<HashMap<String, String>>>> {
 
-    		try {
-    			jObject = new JSONObject(jsonData[0]);
-    			PathJSONParser parser = new PathJSONParser();
-    			routes = parser.parse(jObject);
-    			System.out.println("parseur");
-    		} 
-    		catch (Exception e) {
-    			e.printStackTrace();
-    		}
-    		return routes;
-    	}
+		@Override
+		protected ArrayList<ArrayList<HashMap<String, String>>> doInBackground(
+				String... jsonData) {
 
-    	@Override
-    	protected void onPostExecute(ArrayList<ArrayList<HashMap<String,String>>> routes) {
-    		ArrayList<LatLng> points = null;
-    		PolylineOptions polyLineOptions = null;
+			JSONObject jObject;
+			ArrayList<ArrayList<HashMap<String, String>>> routes = null;
 
-    		// traversing through routes
-    		for (int i = 0; i < routes.size(); i++) {
-    			points = new ArrayList<LatLng>();
-    			polyLineOptions = new PolylineOptions();
-    			ArrayList<HashMap<String,String>> path =  routes.get(i);
+			try {
+				jObject = new JSONObject(jsonData[0]);
+				PathJSONParser parser = new PathJSONParser();
+				routes = parser.parse(jObject);
+				//System.out.println("parseur");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return routes;
+		}
 
-    			for (int j = 0; j < path.size(); j++) {
-    				HashMap<String,String> point =  path.get(j);
+		@Override
+		protected void onPostExecute(
+				ArrayList<ArrayList<HashMap<String, String>>> routes) {
+			ArrayList<LatLng> points = null;
+			PolylineOptions polyLineOptions = null;
 
-    				double lat = Double.parseDouble((String) point.get("lat"));
-    				double lng = Double.parseDouble((String) point.get("lng"));
-    				LatLng position = new LatLng(lat, lng);
-    				System.out.println("derniere boucle for");
-    				points.add(position);
-    			}
+			// traversing through routes
+			for (int i = 0; i < routes.size(); i++) {
+				points = new ArrayList<LatLng>();
+				polyLineOptions = new PolylineOptions();
+				ArrayList<HashMap<String, String>> path = routes.get(i);
 
-    			polyLineOptions.addAll(points);
-    			polyLineOptions.width(2);
-    			polyLineOptions.color(Color.BLUE);
-    		}
-    		System.out.println("poly");
-    		googleMap.addPolyline(polyLineOptions);
-    	}
-    	
-    	
+				for (int j = 0; j < path.size(); j++) {
+					HashMap<String, String> point = path.get(j);
 
-    }
+					double lat = Double.parseDouble((String) point.get("lat"));
+					double lng = Double.parseDouble((String) point.get("lng"));
+					LatLng position = new LatLng(lat, lng);
+					//System.out.println("derniere boucle for");
+					points.add(position);
+				}
+
+				polyLineOptions.addAll(points);
+				polyLineOptions.width(10);
+				polyLineOptions.color(Color.BLUE);
+			}
+			Log.i("ParserTask", "Poly");
+			googleMap.addPolyline(polyLineOptions);
+			c = 0;
+			d = 0;
+			
+		}
+
+	}
 }

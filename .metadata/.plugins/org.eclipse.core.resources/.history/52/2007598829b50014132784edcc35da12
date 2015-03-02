@@ -1,9 +1,0 @@
-package com.pact.map;
-
-public class PathJOSNParther {
-
-	public PathJOSNParther() {
-		// TODO Auto-generated constructor stub
-	}
-
-}

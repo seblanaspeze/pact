@@ -1,9 +1,0 @@
-package com.pact.map;
-
-public class Parseur {
-
-	public Parseur() {
-		// TODO Auto-generated constructor stub
-	}
-
-}

@@ -552,6 +552,7 @@ int string abc_shareactionprovider_share_with_application 0x7f060031
 int string abc_toolbar_collapse_description 0x7f060027
 int string accept 0x7f060002
 int string app_name 0x7f060033
+int string calcul 0x7f060037
 int string common_android_wear_notification_needs_update_text 0x7f060009
 int string common_android_wear_update_text 0x7f060016
 int string common_android_wear_update_title 0x7f060014

@@ -1,7 +1,0 @@
-<resources>
-
-    <string name="app_name">essai1</string>
-	<string name="Button">Nouvel itneraire</string>
-	<string name="pointdepassage">Ajouter un point de passage</string>
-	<string name="valider">Entrer</string>
-</resources>
