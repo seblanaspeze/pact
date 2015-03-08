@@ -1,0 +1,49 @@
+package com.pact.map;
+
+
+	
+	import java.util.ArrayList;
+
+
+	public class RetirerInformation {
+		
+		public static ArrayList<String> getinfo(String data){
+			ArrayList<String> information = new ArrayList<String>();
+			String [] instruction;
+			String []a;
+			String [] b;
+			String mots = "";
+			int nbInstruction;
+			int s1;
+			
+			
+			instruction = data.split("html_instructions");
+			nbInstruction = instruction.length;
+			
+			for(int i=1; i<nbInstruction; i++){
+				
+				a = instruction[i].split("\u003cb\u003e");
+				s1 = a.length;
+				
+				for(int j = 0; j<s1; j++){
+					System.out.println("deuxieme boucle");
+					if(j == 0){
+						mots = a[j];
+					}
+					else if (j == s1-1){
+						b = a[j].split("\u003c/b\u003e");
+						mots = mots + b[0];
+					}
+					else{
+						b = a[j].split("\u003c/b\u003e");
+						mots = mots + b[0];
+						mots = mots + b[1];
+					}
+				}
+				
+				information.add(mots);
+				
+			}
+			return information;
+		}
+}

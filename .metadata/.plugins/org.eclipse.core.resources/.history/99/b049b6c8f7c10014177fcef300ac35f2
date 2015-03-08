@@ -1,0 +1,9 @@
+package com.pact.map;
+
+public class RetirerInformation {
+
+	public RetirerInformation() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

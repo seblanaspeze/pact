@@ -1,0 +1,9 @@
+package com.pact.map;
+
+public class Indication {
+
+	public Indication() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

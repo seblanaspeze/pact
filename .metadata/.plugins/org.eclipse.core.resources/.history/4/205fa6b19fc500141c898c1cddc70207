@@ -1,0 +1,39 @@
+package com.pact.map;
+
+public class Indication {
+	
+	
+	private double lat;
+	private double lng;
+	private String instruction;
+	
+	public Indication(){
+		lat = 0;
+		lng = 0;
+		instruction = "";
+	}
+	public Indication(double lat, double lng, String instruction){
+		this.lat = lat;
+		this.lng = lng;
+		this.instruction = instruction;
+	}
+	
+	public double getLat(){
+		return lat;
+	}
+	public double getLng(){
+		return lng;
+	}
+	public String getInstruction(){
+		return instruction;
+	}
+	public void setLat(double lat){
+		this.lat=lat;
+	}
+	public void setLng(double lng){
+		this.lng=lng;
+	}
+	public void setInstruction(String instruction){
+		this.instruction=instruction;
+	}
+}

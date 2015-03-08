@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,14 +33,15 @@ public class MainActivity extends Activity {
 	Button itineraire;
 	Button valider;
 	//ProgressBar bar;
-	String data;
+	ArrayList<String> data2;
+	ArrayList<LatLng> data3;
 	int c = 0;
 	int d = 0;
-	ArrayList<LatLng> listepoint = new ArrayList<LatLng>();;
-
-	private GoogleMap googleMap;
+	ArrayList<LatLng> listepoint = new ArrayList<LatLng>();
+		private GoogleMap googleMap;
 	private LatLng myLocation;
 	private Location location;
+	private Retour retour = new Retour();
 
 	@SuppressLint("NewApi")
 	@Override
@@ -49,10 +49,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-	//	bar = (ProgressBar) findViewById(R.id.bar);
+		//bar = (ProgressBar) findViewById(R.id.bar);
+		
 		itineraire = (Button) findViewById(R.id.itineraire);
 		valider = (Button) findViewById(R.id.valider);
-		
 
 		try {
 			if (googleMap == null) {
@@ -71,26 +71,28 @@ public class MainActivity extends Activity {
 		location = googleMap.getMyLocation();
 
 		if (location != null) {
-			myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-			googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
-		 }
-		 
+			myLocation = new LatLng(location.getLatitude(),
+					location.getLongitude());
+			googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+					myLocation, 15));
+		}
+
 		// 48 2
 
 		itineraire.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
-				if (c != 0 || d == 0){
+
+				if (c != 0 || d == 0) {
 					googleMap.clear();
 					listepoint.clear();
 				}
-				
 
-				//System.out.println("Boujour");
+				// System.out.println("Boujour");
 				itineraire.setText("		Annuler		");
 				valider.setVisibility(View.VISIBLE);
 
-				googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+				googleMap
+						.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 							@Override
 							public void onMapLongClick(LatLng point) {
 								if (c == 0) {
@@ -104,10 +106,10 @@ public class MainActivity extends Activity {
 								}
 								listepoint.add(point);
 
-								//System.out.println("ici");
+								// System.out.println("ici");
 								c = c + 1;
 								d = d + 1;
-								
+
 							}
 						});
 
@@ -142,21 +144,17 @@ public class MainActivity extends Activity {
 	}
 
 	private class ReadTask extends AsyncTask<String, Integer, String> {
-		
-		/*@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			Toast.makeText(getApplicationContext(), "Début du traitement asynchrone", Toast.LENGTH_LONG).show();
-		}
-		
-		@Override
-		protected void onProgressUpdate(Integer... values){
-			super.onProgressUpdate(values);
-			bar.setVisibility(View.VISIBLE);
-			// Mise à jour de la ProgressBar
-			bar.setProgress(values[0]);
-		}*/
-		
+
+		/*
+		 * @Override protected void onPreExecute() { super.onPreExecute();
+		 * Toast.makeText(getApplicationContext(),
+		 * "Début du traitement asynchrone", Toast.LENGTH_LONG).show(); }
+		 * 
+		 * @Override protected void onProgressUpdate(Integer... values){
+		 * super.onProgressUpdate(values); bar.setVisibility(View.VISIBLE); //
+		 * Mise à jour de la ProgressBar bar.setProgress(values[0]); }
+		 */
+
 		@Override
 		protected String doInBackground(String... url) {
 			String data = "";
@@ -166,13 +164,17 @@ public class MainActivity extends Activity {
 			} catch (Exception e) {
 				Log.d("Background Task", e.toString());
 			}
+			
+			
+			
+			
 			return data;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			//bar.setVisibility(View.INVISIBLE);
+			// bar.setVisibility(View.INVISIBLE);
 			new ParserTask().execute(result);
 		}
 	}
@@ -192,7 +194,9 @@ public class MainActivity extends Activity {
 				jObject = new JSONObject(jsonData[0]);
 				PathJSONParser parser = new PathJSONParser();
 				routes = parser.parse(jObject);
-				//System.out.println("parseur");
+				data2 = parser.getInfo(jObject);
+				data3 = parser.getInfo2(jObject);
+				// System.out.println("parseur");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -217,10 +221,10 @@ public class MainActivity extends Activity {
 					double lat = Double.parseDouble((String) point.get("lat"));
 					double lng = Double.parseDouble((String) point.get("lng"));
 					LatLng position = new LatLng(lat, lng);
-					//System.out.println("derniere boucle for");
+					// System.out.println("derniere boucle for");
 					points.add(position);
 				}
-
+				
 				polyLineOptions.addAll(points);
 				polyLineOptions.width(10);
 				polyLineOptions.color(Color.BLUE);
@@ -229,7 +233,37 @@ public class MainActivity extends Activity {
 			googleMap.addPolyline(polyLineOptions);
 			c = 0;
 			d = 0;
+
 			
+			// Initialiser les objet pour le retour
+			data2=RetirerInformation.getinfo(data2);
+			/*int h=0;
+			for(int i=0; i<data2.size(); i++){
+				System.out.println(data2.get(i));
+				h=h+1;
+			}
+			System.out.println("s=" + data3.size());
+			for(int i=0; i<data3.size(); i++){
+				System.out.println(data3.get(i));
+				
+			}
+			System.out.println("h=" +h);
+			h = 0;*/
+			
+			if( data2.size() == data3.size()){
+				for(int i = 0; i <data2.size(); i++){
+					retour.addNew(data3.get(i), data2.get(i));
+				}
+				
+			}
+			
+			for (int k=0; k<retour.size(); k++){
+				System.out.println("Lat=" + retour.get(k).getLat()); 
+				System.out.println("Lng=" +retour.get(k).getLng());
+				System.out.println("Instruction=" +retour.get(k).getInstruction());
+				
+			}
+
 		}
 
 	}

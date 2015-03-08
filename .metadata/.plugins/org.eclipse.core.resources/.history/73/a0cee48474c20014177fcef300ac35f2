@@ -1,0 +1,59 @@
+package com.pact.map;
+
+
+	
+	import java.util.ArrayList;
+
+
+	public class RetirerInformation {
+		private static final String partie1 = "\\";
+		private static final String partie2 = "/";
+		private static final String partie3 = "u003c";
+		private static final String partie4 = "u003e";
+		private static final String partie5 = "b";
+		
+		private static final String comparateur1 = partie1 + partie3 + partie5 + partie1 + partie4;
+		private static final String comparateur2 = partie1 + partie3 + partie2 + partie5 + partie1 + partie4;
+		
+		public static ArrayList<String> getinfo(String data){
+			ArrayList<String> information = new ArrayList<String>();
+			String [] instruction;
+			String []a;
+			String [] b;
+			String mots = "";
+			int nbInstruction;
+			int s1;
+			
+			
+			instruction = data.split("html_instructions");
+			nbInstruction = instruction.length;
+			
+			for(int i=1; i<nbInstruction; i++){
+				
+				System.out.println(comparateur1);
+				a = instruction[i].split(comparateur1);
+				s1 = a.length;
+				
+				for(int j = 0; j<s1; j++){
+					
+					if(j == 0){
+						mots = a[j];
+					}
+					else if (j == s1-1){
+						b = a[j].split(comparateur2);
+						mots = mots + b[0];
+					}
+					else{
+						b = a[j].split(comparateur2);
+						mots = mots + b[0];
+						mots = mots + b[1];
+						System.out.println("else");
+					}
+				}
+				
+				information.add(mots);
+				
+			}
+			return information;
+		}
+}
